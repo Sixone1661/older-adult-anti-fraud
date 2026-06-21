@@ -67,3 +67,25 @@
 - 这是教学原型，能够展示模拟任务表现，但不能证明会直接降低真实诈骗发生率；
 - 语音朗读和图片导出不在当前 P0 范围。
 
+
+## 使用 Streamlit 部署到网络
+
+项目根目录包含：
+
+- `streamlit_app.py`：Streamlit 入口，将现有 HTML、CSS 和 JavaScript 内联到组件中；
+- `requirements.txt`：云端安装 Streamlit；
+- `.streamlit/config.toml`：主题与隐私配置。
+
+部署步骤：
+
+1. 把当前 `main` 分支推送到 GitHub；
+2. 登录 [Streamlit Community Cloud](https://share.streamlit.io/)；
+3. 选择“Create app”；
+4. 选择 GitHub 仓库和 `main` 分支；
+5. Main file path 填写 `streamlit_app.py`；
+6. 点击部署，等待生成公开网址。
+
+现有前端没有被重写。Streamlit 启动时会读取并内联原始网页资源，因此题目、样式、localStorage 和计分逻辑仍使用同一份源码。
+
+注意：训练记录保存在访问者浏览器中的组件存储空间，不上传至 Streamlit 服务器。若平台更新、重新部署或浏览器限制组件存储，建议重新检查跨会话记录是否仍可保留。
+
