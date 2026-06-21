@@ -1,0 +1,48 @@
+﻿<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="“停一下”老年数字防骗情境训练">
+  <title>停一下｜老年数字防骗情境训练</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+</head>
+<body>
+  <a class="skip-link" href="#app-main">跳到主要内容</a>
+  <header class="site-header" aria-label="产品信息">
+    <div class="site-header__inner">
+      <span class="brand">停一下</span>
+      <span class="simulation-label">模拟训练</span>
+    </div>
+  </header>
+  <main id="app-main" class="app-shell" tabindex="-1" aria-live="polite"></main>
+  <footer class="site-footer">
+    所有情境均为虚构，请勿输入真实账号、密码或验证码。
+  </footer>
+  <dialog id="confirm-dialog" class="confirm-dialog" aria-labelledby="confirm-title" aria-describedby="confirm-message">
+    <h2 id="confirm-title">请确认</h2>
+    <p id="confirm-message"></p>
+    <div class="button-row">
+      <button type="button" class="button button--secondary" data-dialog-cancel>取消</button>
+      <button type="button" class="button button--danger" data-dialog-confirm>确认</button>
+    </div>
+  </dialog>
+  <noscript><p class="noscript">需要启用 JavaScript 才能进行训练。</p></noscript>
+  <script defer src="data/content.js"></script>
+  <script defer src="data/scenarios.js"></script>
+  <script defer src="js/storage.js"></script>
+  <script defer src="js/metrics.js"></script>
+  <script defer src="js/state.js"></script>
+  <script defer src="js/router.js"></script>
+  <script defer src="js/render.js"></script>
+  <script defer src="js/interactions.js"></script>
+  <script defer src="js/app.js"></script>
+</body>
+</html>
+
+
+
+

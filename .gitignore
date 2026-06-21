@@ -1,0 +1,7 @@
+﻿# Local development and OS artifacts
+work/
+outputs/
+%SystemDrive%/
+*.log
+.DS_Store
+Thumbs.db
