@@ -78,10 +78,6 @@ def render_agent_page() -> None:
 def build_web_app() -> str:
     document = read_text("index.html")
     hero_data = base64.b64encode((ROOT / "assets/illustrations/hero-elder-family.png").read_bytes()).decode("ascii")
-    document = document.replace(
-        "assets/illustrations/hero-elder-family.png",
-        f"data:image/png;base64,{hero_data}",
-    )
 
     for relative_path in CSS_FILES:
         stylesheet = read_text(relative_path)
@@ -98,6 +94,13 @@ def build_web_app() -> str:
             script_tag,
             f'<script data-source="{relative_path}">\n{script}\n</script>',
         )
+
+    # ui-enhancements.js creates the hero image element, so replace its path
+    # only after every JavaScript file has been embedded into the document.
+    document = document.replace(
+        "assets/illustrations/hero-elder-family.png",
+        f"data:image/png;base64,{hero_data}",
+    )
 
     resize_bridge = """
 <script>
