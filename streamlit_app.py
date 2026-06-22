@@ -1,7 +1,10 @@
-﻿from pathlib import Path
+from pathlib import Path
+import os
+import base64
 
 import streamlit as st
 import streamlit.components.v1 as components
+from agent_service import MAX_INPUT_CHARS, ask_agent
 
 
 ROOT = Path(__file__).resolve().parent
@@ -19,6 +22,8 @@ JS_FILES = (
     "js/router.js",
     "js/render.js",
     "js/interactions.js",
+    "js/ui-enhancements.js",
+    "js/p1.js",
     "js/app.js",
 )
 
@@ -27,9 +32,56 @@ def read_text(relative_path: str) -> str:
     return (ROOT / relative_path).read_text(encoding="utf-8-sig")
 
 
+def get_agent_config() -> tuple[str | None, str]:
+    try:
+        key = st.secrets.get("OPENAI_API_KEY")
+        model = st.secrets.get("OPENAI_MODEL")
+    except Exception:
+        key = None
+        model = None
+    return key or os.getenv("OPENAI_API_KEY"), model or os.getenv("OPENAI_MODEL", "gpt-5-mini")
+
+
+def render_agent_page() -> None:
+    st.markdown('<a href="?" target="_self">← 返回训练首页</a>', unsafe_allow_html=True)
+    st.title("防骗助手")
+    st.warning("请勿输入身份证号、银行卡号、密码、验证码、详细住址等个人敏感信息。")
+    st.caption("助手提供“停、查、问”的核验建议，不保证识别所有诈骗，也不替代银行、平台或警方的官方判断。")
+    if "agent_messages" not in st.session_state:
+        st.session_state.agent_messages = []
+    st.subheader("你想做什么？")
+    labels = ["帮我分析一条可疑消息", "教我怎样核验信息", "我现在应该找谁求助"]
+    for column, label in zip(st.columns(3), labels):
+        if column.button(label, use_container_width=True):
+            st.session_state.agent_pending = label
+    for message in st.session_state.agent_messages:
+        with st.chat_message(message["role"]):
+            st.write(message["content"])
+    prompt = st.chat_input("请输入不含敏感信息的可疑内容", max_chars=MAX_INPUT_CHARS)
+    prompt = prompt or st.session_state.pop("agent_pending", None)
+    if prompt:
+        history = list(st.session_state.agent_messages)
+        st.session_state.agent_messages.append({"role": "user", "content": prompt})
+        with st.chat_message("user"):
+            st.write(prompt)
+        api_key, model = get_agent_config()
+        result = ask_agent(prompt, history, api_key, model)
+        st.session_state.agent_messages.append({"role": "assistant", "content": result["message"]})
+        with st.chat_message("assistant"):
+            st.write(result["message"])
+    if st.button("清空对话"):
+        st.session_state.agent_messages = []
+        st.rerun()
+
+
 @st.cache_data(show_spinner=False)
 def build_web_app() -> str:
     document = read_text("index.html")
+    hero_data = base64.b64encode((ROOT / "assets/illustrations/hero-elder-family.png").read_bytes()).decode("ascii")
+    document = document.replace(
+        "assets/illustrations/hero-elder-family.png",
+        f"data:image/png;base64,{hero_data}",
+    )
 
     for relative_path in CSS_FILES:
         stylesheet = read_text(relative_path)
@@ -91,6 +143,10 @@ st.set_page_config(
     initial_sidebar_state="collapsed",
 )
 
+if st.query_params.get("view") == "agent":
+    render_agent_page()
+    st.stop()
+
 st.markdown(
     """
 <style>
@@ -99,7 +155,7 @@ st.markdown(
 }
 [data-testid="stAppViewContainer"],
 [data-testid="stMain"] {
-  background: #f7f5f2;
+  background: #fff9f1;
 }
 [data-testid="stMainBlockContainer"] {
   width: 100%;

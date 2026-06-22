@@ -23,3 +23,34 @@
   html { scroll-behavior: auto; }
 }
 
+/* Warm, accessible visual system */
+.site-header { background: rgba(255,255,255,.96); }
+.site-header__inner, .app-shell, .site-footer { width: min(calc(100% - 2rem), var(--content-max)); }
+.site-header__inner { flex-wrap: wrap; gap: .55rem 1rem; min-height: 70px; padding-block: .45rem; }
+.brand { color: var(--color-title); font-size: 1.3rem; font-weight: 800; }
+.header-tools { display: flex; flex-wrap: wrap; align-items: center; gap: .4rem; }
+.simulation-label { border-color: var(--color-primary-dark); border-radius: 999px; color: var(--color-title); background: #fff7f0; }
+.page { gap: 1.15rem; }
+.training-progress { display: grid; gap: .3rem; }
+.training-progress__label { color: var(--color-muted); font-size: .88rem; font-weight: 750; }
+.training-progress__track { height: 8px; overflow: hidden; border-radius: 99px; background: #f0e3da; }
+.training-progress__bar { display: block; width: var(--progress, 0%); height: 100%; border-radius: inherit; background: var(--color-primary); }
+.hero-layout { display: grid; gap: 1.25rem; align-items: center; }
+.hero-copy { display: grid; gap: .8rem; }
+.hero-copy h1 { margin-bottom: 0; font-size: clamp(2rem, 7vw, 2.6rem); }
+.hero-subtitle { margin: 0; color: var(--color-title); font-size: 1.2rem; font-weight: 750; }
+.hero-illustration { overflow: hidden; border: 1px solid var(--color-border); border-radius: 8px; background: #fff3e6; box-shadow: var(--shadow); }
+.hero-illustration img { display: block; width: 100%; aspect-ratio: 16/9; object-fit: cover; object-position: center; }
+.strategy-highlight { display: flex; flex-wrap: wrap; gap: .55rem; margin: 0; padding: 0; list-style: none; }
+.strategy-highlight li { padding: .3rem .7rem; border-radius: 999px; color: var(--color-title); background: var(--color-soft); font-weight: 800; }
+@media (min-width: 760px) {
+  .hero-layout { grid-template-columns: minmax(0,.9fr) minmax(360px,1.1fr); }
+  .hero-layout .hero-illustration { grid-column: 2; grid-row: 1; }
+  .hero-layout .hero-copy { grid-column: 1; grid-row: 1; }
+}
+@media (max-width: 520px) {
+  .site-header__inner, .app-shell, .site-footer { width: min(calc(100% - 1.25rem), var(--content-max)); }
+  .header-tools { width: 100%; }
+  .hero-illustration img { aspect-ratio: 4/3; }
+}
+
